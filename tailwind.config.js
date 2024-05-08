@@ -2,7 +2,12 @@
 export default {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        poetsen: ["Poetsen One", "sans-serif"],
+        protest: ["Protest Riot", "sans-serif"],
+      },
+    },
   },
   plugins: [],
 };
