@@ -5,7 +5,7 @@ export default {
     extend: {
       fontFamily: {
         poetsen: ["Poetsen One", "sans-serif"],
-        protest: ["Protest Riot", "sans-serif"],
+        rethink: ["Rethink Sans", "sans-serif"],
       },
     },
   },
