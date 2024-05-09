@@ -2,10 +2,16 @@ import { FC, useState } from "react";
 import { getRandomWord } from "../API/GetWord";
 
 export const Hangman: FC = () => {
-  const [randomWord, setRandomWord] = useState<string>();
+  const [randomWord, setRandomWord] = useState<string[]>();
   const retrieveRandomWord = async () => {
-    const randomWord = await getRandomWord();
-    setRandomWord(randomWord);
+    let randomWord: string = await getRandomWord();
+    const wordLength = randomWord.length;
+    if (wordLength < 4 || wordLength > 20) {
+      randomWord = await getRandomWord();
+    }
+    for (let i = 0; i < randomWord.length; i++) {
+      setRandomWord([...randomWord, randomWord[i]]);
+    }
   };
   return (
     <div className="flex items-center justify-center flex-col gap-6">
@@ -15,7 +21,11 @@ export const Hangman: FC = () => {
       >
         Start
       </button>
-      <div>{randomWord}</div>
+      <div className="flex flex-row gap-6">
+        {randomWord?.map(() => (
+          <div className="text-5xl">__</div>
+        ))}
+      </div>
     </div>
   );
 };
