@@ -22,7 +22,6 @@ export const Hangman: FC = () => {
   };
   const handleGuess = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     for (let i = 0; i < guess!.length; i++) {
       for (let j = 0; j < randomWord!.length; j++) {
         if (guess![i] === randomWord![j]) {
@@ -31,6 +30,7 @@ export const Hangman: FC = () => {
         }
       }
     }
+    setGuess("");
   };
   return (
     <div className="flex items-center justify-center flex-col gap-6">
