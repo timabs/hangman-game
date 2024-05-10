@@ -2,26 +2,35 @@ import { FC, useState } from "react";
 import { getRandomWord } from "../API/GetWord";
 
 export const Hangman: FC = () => {
-  const [randomWord, setRandomWord] = useState<string[]>();
+  const [randomWord, setRandomWord] = useState<string[]>([]);
   const [guess, setGuess] = useState<string>();
   const [gameStarted, setGameStart] = useState<boolean>();
+  const [validIndices, setValidIndices] = useState<number[]>([]);
   const retrieveRandomWord = async () => {
     setGameStart(true);
-    let randomWord: string = await getRandomWord();
-    const wordLength = randomWord.length;
+    let rndWord: string = await getRandomWord();
+    const wordLength = rndWord.length;
     if (wordLength < 4 || wordLength > 20) {
-      randomWord = await getRandomWord();
+      rndWord = await getRandomWord();
     }
-    for (let i = 0; i < randomWord.length; i++) {
-      setRandomWord([...randomWord, randomWord[i]]);
-    }
+    const rndWordArr = [...rndWord];
+    setRandomWord(rndWordArr);
+    console.log(rndWord);
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGuess(e.target.value);
   };
   const handleGuess = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(guess);
+
+    for (let i = 0; i < guess!.length; i++) {
+      for (let j = 0; j < randomWord!.length; j++) {
+        if (guess![i] === randomWord![j]) {
+          setValidIndices([...validIndices!, j]);
+          console.log(j);
+        }
+      }
+    }
   };
   return (
     <div className="flex items-center justify-center flex-col gap-6">
@@ -36,7 +45,10 @@ export const Hangman: FC = () => {
       <div className="flex flex-row gap-6">
         {randomWord?.map((letter, index) => (
           <div className="text-5xl" data-letterpos={index + 1} key={index}>
-            __
+            <div>
+              {validIndices.includes(randomWord.indexOf(letter)) ? letter : ""}
+            </div>
+            {validIndices.includes(randomWord.indexOf(letter)) ? "" : "__"}
           </div>
         ))}
       </div>
