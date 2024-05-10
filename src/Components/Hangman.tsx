@@ -22,14 +22,18 @@ export const Hangman: FC = () => {
   };
   const handleGuess = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!guess) return;
+    const newValidIndices: number[] = [];
     for (let i = 0; i < guess!.length; i++) {
       for (let j = 0; j < randomWord!.length; j++) {
         if (guess![i] === randomWord![j]) {
-          setValidIndices([...validIndices!, j]);
-          console.log(j);
+          newValidIndices.push(j);
         }
       }
     }
+    setValidIndices((prevIndices) => [
+      ...new Set([...prevIndices, ...newValidIndices]),
+    ]);
     setGuess("");
   };
   return (
@@ -45,10 +49,7 @@ export const Hangman: FC = () => {
       <div className="flex flex-row gap-6">
         {randomWord?.map((letter, index) => (
           <div className="text-5xl" data-letterpos={index + 1} key={index}>
-            <div>
-              {validIndices.includes(randomWord.indexOf(letter)) ? letter : ""}
-            </div>
-            {validIndices.includes(randomWord.indexOf(letter)) ? "" : "__"}
+            {validIndices.includes(index) ? letter : "__"}
           </div>
         ))}
       </div>
