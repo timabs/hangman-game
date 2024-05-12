@@ -6,17 +6,18 @@ export const Hangman: FC = () => {
   const [randomWord, setRandomWord] = useState<string[]>([]);
   const [guess, setGuess] = useState<string>();
   const [gameStarted, setGameStart] = useState<boolean>();
+  const [gameOver, setGameOver] = useState<boolean>(false);
+  const [playerWon, setPlayerWon] = useState<boolean>(false);
   const [validIndices, setValidIndices] = useState<number[]>([]);
   const [incorrectGuesses, setIncorrectGuesses] = useState<string[]>([]);
-  const hangmanParts = [
-    "head",
-    "body",
-    "left arm",
-    "right arm",
-    "left leg",
-    "right leg",
-  ];
 
+  const startNewGame = () => {
+    setGameOver(false);
+    setPlayerWon(false);
+    setValidIndices([]);
+    setIncorrectGuesses([]);
+    retrieveRandomWord();
+  };
   const retrieveRandomWord = async () => {
     setGameStart(true);
     let rndWord: string = await getRandomWord();
@@ -44,30 +45,51 @@ export const Hangman: FC = () => {
       }
     }
     if (!isGuessCorrect && !incorrectGuesses.includes(guess)) {
-      setIncorrectGuesses((prev) => [...prev, guess]);
+      const newIncorrectGuesses = [...incorrectGuesses, guess];
+      setIncorrectGuesses(newIncorrectGuesses);
+      if (newIncorrectGuesses.length >= 6) {
+        setGameOver(true);
+        return;
+      }
     }
     setValidIndices((prevIndices) => [
       ...new Set([...prevIndices, ...newValidIndices]),
     ]);
+
+    const allIndicesFound = randomWord.every((_, index) =>
+      newValidIndices.includes(index)
+    );
+    if (allIndicesFound) {
+      setPlayerWon(true);
+      setGameOver(true);
+    }
     setGuess("");
   };
+
   return (
     <div className="flex items-center justify-center flex-col gap-6">
       <button
-        onClick={() => retrieveRandomWord()}
+        onClick={() => startNewGame()}
         className={`${
-          gameStarted ? "hidden" : ""
+          gameStarted && !gameOver ? "hidden" : ""
         } font-rethink text-white bg-green-700 px-4 py-2 rounded-md hover:bg-green-800`}
       >
-        Start
+        {gameOver ? "Start New Game" : "Start"}
       </button>
-      <div className="flex flex-row gap-6">
-        {randomWord?.map((letter, index) => (
-          <div className="text-5xl" data-letterpos={index + 1} key={index}>
-            {validIndices.includes(index) ? letter : "__"}
-          </div>
-        ))}
-      </div>
+      {!gameOver && (
+        <div className="flex flex-row gap-6">
+          {randomWord.map((letter, index) => (
+            <div className="text-5xl" key={index}>
+              {validIndices.includes(index) ? letter : "__"}
+            </div>
+          ))}
+        </div>
+      )}
+      {gameOver && (
+        <div className="text-3xl font-bold text-red-600">
+          {playerWon ? "Congratulations! You've won!" : "Game Over! Try again."}
+        </div>
+      )}
 
       <form
         onSubmit={(e) => handleGuess(e)}
@@ -94,16 +116,18 @@ export const Hangman: FC = () => {
           className="bg-green-700 text-white rounded-md px-4 py-2 w-2/3 hover:cursor-pointer hover:bg-green-800"
         ></input>
       </form>
-      <div
-        className={`${
-          gameStarted ? "" : "hidden"
-        } flex flex-col items-center justify-center gap-4`}
-      >
-        <HangmanContainer incorrectGuesses={incorrectGuesses} />
-        <div className="w-fit border-2 border-gray-800 rounded-md px-4 py-2">
-          Incorrect Guesses: {incorrectGuesses.join(", ")}
+      {!gameOver && (
+        <div
+          className={`${
+            gameStarted ? "" : "hidden"
+          } flex flex-col items-center justify-center gap-4`}
+        >
+          <HangmanContainer incorrectGuesses={incorrectGuesses} />
+          <div className="w-fit border-2 border-gray-800 rounded-md px-4 py-2">
+            Incorrect Guesses: {incorrectGuesses.join(", ")}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
