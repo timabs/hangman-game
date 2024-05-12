@@ -33,7 +33,7 @@ export const Hangman: FC = () => {
   };
   const handleGuess = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!guess) return;
+    if (!guess || gameOver) return;
     const newValidIndices: number[] = [];
     let isGuessCorrect = false;
     for (let i = 0; i < guess!.length; i++) {
@@ -44,24 +44,28 @@ export const Hangman: FC = () => {
         }
       }
     }
+    setValidIndices((prevIndices) => {
+      const updatedIndices = new Set([...prevIndices, ...newValidIndices]);
+
+      // Check if all indices of the randomWord have been guessed
+      const allIndicesFound = randomWord.every((_, index) =>
+        updatedIndices.has(index)
+      );
+      if (allIndicesFound) {
+        setPlayerWon(true);
+        setGameOver(true);
+      }
+
+      return [...updatedIndices];
+    });
+
+    // Update incorrect guesses and handle game over
     if (!isGuessCorrect && !incorrectGuesses.includes(guess)) {
       const newIncorrectGuesses = [...incorrectGuesses, guess];
       setIncorrectGuesses(newIncorrectGuesses);
       if (newIncorrectGuesses.length >= 6) {
         setGameOver(true);
-        return;
       }
-    }
-    setValidIndices((prevIndices) => [
-      ...new Set([...prevIndices, ...newValidIndices]),
-    ]);
-
-    const allIndicesFound = randomWord.every((_, index) =>
-      newValidIndices.includes(index)
-    );
-    if (allIndicesFound) {
-      setPlayerWon(true);
-      setGameOver(true);
     }
     setGuess("");
   };
@@ -86,7 +90,11 @@ export const Hangman: FC = () => {
         </div>
       )}
       {gameOver && (
-        <div className="text-3xl font-bold text-red-600">
+        <div
+          className={`${
+            playerWon ? "text-blue-600" : "text-red-600"
+          } text-3xl font-bold`}
+        >
           {playerWon ? "Congratulations! You've won!" : "Game Over! Try again."}
         </div>
       )}
