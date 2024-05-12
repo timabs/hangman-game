@@ -16,16 +16,16 @@ export const HangmanContainer: FC<HangmanProps> = ({ incorrectGuesses }) => {
           <div className="w-1 bg-black h-14 absolute top-12 left-1/2 transform -translate-x-1/2"></div>
         )}
         {incorrectGuesses.length > 2 && (
-          <div className="w-12 h-1 bg-black absolute top-14 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-45 origin-top"></div>
+          <div className="w-10 h-1 bg-black absolute top-[3.75rem] left-1/2 transform rotate-45 origin-top"></div>
         )}
         {incorrectGuesses.length > 3 && (
-          <div className="w-12 h-1 bg-black absolute top-14 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -rotate-45 origin-top"></div>
+          <div className="w-10 h-1 bg-black absolute top-[3.75rem] left-[4%] transform -rotate-45 origin-top"></div>
         )}
         {incorrectGuesses.length > 4 && (
-          <div className="w-1 bg-black h-12 absolute top-26 left-1/2 transform -translate-x-1/2 rotate-12"></div>
+          <div className="w-1 bg-black h-12 absolute rotate-[25deg] top-[55%] left-[35%]"></div>
         )}
         {incorrectGuesses.length > 5 && (
-          <div className="w-1 bg-black h-12 absolute top-26 left-1/2 transform -translate-x-1/2 -rotate-12"></div>
+          <div className="w-1 bg-black h-12 absolute rotate-[-25deg] top-[55%] left-[60%]"></div>
         )}
       </div>
     </div>

@@ -26,7 +26,6 @@ export const Hangman: FC = () => {
     }
     const rndWordArr = [...rndWord];
     setRandomWord(rndWordArr);
-    console.log(rndWord);
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGuess(e.target.value);
