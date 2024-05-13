@@ -74,9 +74,9 @@ export const Hangman: FC = () => {
     <div className="flex items-center justify-center flex-col gap-6">
       <button
         onClick={() => startNewGame()}
-        className={`${
-          gameStarted && !gameOver ? "hidden" : ""
-        } font-rethink text-white bg-green-700 px-4 py-2 rounded-md hover:bg-green-800`}
+        className={`${gameStarted && !gameOver ? "hidden" : ""} ${
+          gameOver ? "" : "w-1/6 h-20 text-3xl"
+        } font-rethink bg-accent text-white px-4 py-2 rounded-md hover:bg-[#007363]`}
       >
         {gameOver ? "Start New Game" : "Start"}
       </button>
@@ -115,13 +115,13 @@ export const Hangman: FC = () => {
             name="guess"
             value={guess}
             onChange={(e) => handleChange(e)}
-            className="outline-none border-b-2 w-2/3 border-green-700 active:outline-1 px-2 py-1"
+            className="bg-bg outline-none border-b-2 w-2/3 border-accent active:outline-1 px-2 py-1"
           ></input>
         </label>
         <input
           type="submit"
           value="Guess"
-          className="bg-green-700 text-white rounded-md px-4 py-2 w-2/3 hover:cursor-pointer hover:bg-green-800"
+          className="bg-accent text-white rounded-md px-4 py-2 w-2/3 hover:cursor-pointer hover:bg-[#007363]"
         ></input>
       </form>
       {!gameOver && (

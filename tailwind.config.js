@@ -6,6 +6,7 @@ export default {
       fontFamily: {
         poetsen: ["Poetsen One", "sans-serif"],
         rethink: ["Rethink Sans", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"],
       },
       colors: {
         bg: "#F0F0F0",
