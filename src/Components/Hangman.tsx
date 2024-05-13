@@ -80,7 +80,7 @@ export const Hangman: FC = () => {
       >
         {gameOver ? "Start New Game" : "Start"}
       </button>
-      {!gameOver && (
+      {(playerWon || !gameOver) && (
         <div className="flex flex-row gap-6">
           {randomWord.map((letter, index) => (
             <div className="text-5xl" key={index}>
